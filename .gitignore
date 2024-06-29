@@ -7,3 +7,4 @@ server/.chalice/config.json
 .chalice/venv/
 __pycache__
 env/
+mimir_env
