@@ -9,7 +9,7 @@ Our frontend is built with NextJS, a powerful framework for building web applica
 1. Open your terminal.
 2. Change directory to the frontend folder:
    ```
-   cd app
+   cd frontend
    ```
 3. Install all the necessary dependencies:
    ```
@@ -21,7 +21,6 @@ Our frontend is built with NextJS, a powerful framework for building web applica
    ```
 5. Open your web browser and go to [http://localhost:3000](http://localhost:3000) to see the application running.
 
-To provide a command for users to test their AWS CLI configuration and link the AWS setup credentials section if they encounter an error, you can modify the README as follows:
 
 ## Backend Setup
 
@@ -35,11 +34,15 @@ Our backend is a Chalice project, which is a framework for writing serverless ap
    - If you see an error or if your credentials are not displayed correctly, refer to the [Setup AWS Credentials](#setup-aws-credentials) section below.
 2. Navigate to the backend directory:
    ```
-   cd backend
+   cd server
    ```
 3. Create a new virtual environment named `env`:
    ```
    python -m venv env
+   ```
+   Alternatively
+   ```
+   python3 -m venv env
    ```
 4. Activate the virtual environment:
    ```

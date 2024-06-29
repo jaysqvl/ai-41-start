@@ -3,3 +3,7 @@ env/
 mimir-env
 .env
 server/.chalice/config.json
+.chalice/deployments/
+.chalice/venv/
+__pycache__
+env/

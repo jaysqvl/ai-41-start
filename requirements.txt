@@ -1,5 +1,0 @@
-# requirements for chalice
-chalice
-openai
-python-dotenv
-requests
