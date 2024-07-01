@@ -74,11 +74,90 @@ def chat_function_call(
         },
         {"role": "user", "content": format_user_msg},
     ]
+
     # Write this
-    tools = []
+    tools = [
+        {
+            "type": "function",
+            "function": {
+                "name": "pinecone_youtube_upload",
+                "description": "Given a YouTube URL, upload the video to the Pinecone vector database.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "youtube_url": {
+                            "type": "string",
+                            "description": "The URL of the YouTube video. should start with https://www.youtube.com/watch?v="
+                        }
+                    },
+                    "required": ["youtube_url"]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "pinecone_website_upload",
+                "description": "Given a website URL that is NOT youtube, it will add its HTML contents to the Pinecone vector store.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "website_url": {
+                            "type": "string",
+                            "description": "A website url."
+                        }
+                    },
+                    "required": ["website_url"]
+                }
+            }
+        }
+    ]
 
     try:
-      print("Attempting function call")
+        print("Attempting function call")
+        response = client.chat.completions.create(
+                model=model,
+                messages=messages,
+                tools=tools,
+                tool_choice="auto"
+        )
+
+        print(f"Response: {response}")
+        response_message=response.choices[0].message
+
+        tool_calls= response_message.tool_calls
+
+        if tool_calls:
+            available_functions = {
+                "pinecone_youtube_upload": pinecone_youtube_upload,
+                "pinecone_website_upload": pinecone_website_upload
+            }
+
+            messages.append(response_message)
+
+            for tool_call in tool_calls:
+                # { "function": {"name": "pinecone_youtube_upload", "arguments": "{...}"} }
+                function_name = tool_call.function.name
+                function_to_call = available_functions[function_name]
+                function_args = json.loads(tool_call.function.arguments)
+                function_response = function_to_call(**function_args)
+                messages.append({
+                    "tool_call_id": tool_call.id,
+                    "role": "tool",
+                    "name": function_name,
+                    "content": function_response
+                })
+
+                second_response = client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=messages
+                )
+                messages.append(second_response)
+        else:
+            print("no tool requested")
+            messages.append(response_message)
+      
+
     except Exception as e:
         error_message=f"Function Call: There was an error {e}"
         messages.append({

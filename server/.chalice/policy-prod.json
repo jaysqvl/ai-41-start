@@ -9,16 +9,6 @@
         "logs:PutLogEvents"
       ],
       "Resource": "arn:aws:logs:*:*:*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": ["dynamodb:Query", "dynamodb:PutItem"],
-      "Resource": "arn:aws:dynamodb:us-west-2:307055148792:table/Messages"
-    },
-    {
-      "Effect": "Allow",
-      "Action": ["s3:PutObject", "s3:GetObject"],
-      "Resource": "arn:aws:s3:::ai41-audio-files-test/*"
     }
   ]
 }

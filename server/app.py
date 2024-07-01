@@ -56,19 +56,29 @@ Test with `chalice local`
 Deploy with `chalice deploy`
 
 """
-# @app.route("/chat", methods=["POST"], cors=cors_config)
-# def mimir_1():
-#     """Mimir Starter Route"""
-#     try:
-#         user_message = app.current_request.json_body["message"]
-#         user_chat_id = app.current_request.json_body["chat_id"]
+@app.route("/chat", methods=["POST"], cors=cors_config)
+def mimir_1():
+    """Mimir Starter Route"""
+    try:
+        user_message = app.current_request.json_body["message"]
+        user_chat_id = app.current_request.json_body["chat_id"]
 
+        messages = chat_function_call(user_msg=user_message)
+        bot_message, tool_message = determine_assistant_tool_messages(messages)
+
+        response_object = {
+            "chat_id": str(user_chat_id),
+            "timestamp": current_epoch_time(),
+            "content": bot_message,
+            "role": "assistant", # final summarized message
+            "source_documents": tool_message, # intermediate function call results
+            "audio_file_url": None,
+        }
         
-#         response_object = {}
-#         return Response(body=response_object, status_code=200)
-#     except Exception as e:
-#         print(f'there was an error {e}')
-#         return Response(body={"error": str(e)}, status_code=500)
+        return Response(body=response_object, status_code=200)
+    except Exception as e:
+        print(f'there was an error {e}')
+        return Response(body={"error": str(e)}, status_code=500)
     
 # @app.route("/chat", methods=["POST"], cors=cors_config)
 # def kitsune_chatbot_1():
@@ -109,35 +119,36 @@ Deploy with `chalice deploy`
 #     except Exception as e:
 #         return Response(body={"error": str(e)}, status_code=500)
     
-@app.route("/chat", methods=["POST"], cors=cors_config)
-def kitsune_chatbot_3():
-    try:
-        user_message = app.current_request.json_body["message"]
-        user_temperature = app.current_request.json_body["temperature"]
-        user_model = app.current_request.json_body["model"]
-        user_prompt_template = app.current_request.json_body["prompt_template"]
-        user_chat_id = app.current_request.json_body["chat_id"]
-        user_timestamp = current_epoch_time()
+# @app.route("/chat", methods=["POST"], cors=cors_config)
+# def kitsune_chatbot_3():
+#     try:
+#         user_message = app.current_request.json_body["message"]
+#         user_temperature = app.current_request.json_body["temperature"]
+#         user_model = app.current_request.json_body["model"]
+#         user_prompt_template = app.current_request.json_body["prompt_template"]
+#         user_chat_id = app.current_request.json_body["chat_id"]
+#         user_timestamp = current_epoch_time()
 
-        store_message(user_chat_id, user_message, "user", user_timestamp, None)
+#         store_message(user_chat_id, user_message, "user", user_timestamp, None)
 
-        bot_response = send_message_to_openai_with_history(user_message, user_prompt_template, user_model, user_temperature, user_chat_id)
+#         bot_response = send_message_to_openai_with_history(user_message, user_prompt_template, user_model, user_temperature, user_chat_id)
         
-        audio = text_to_audio(bot_response)
-        bot_timestamp = current_epoch_time()
-        s3_file_name = generate_mp3_file_name()
-        upload_audio_bytes_to_s3(audio, "ai41-audio-files-test", user_chat_id, bot_timestamp, s3_file_name)
-        bot_audio_url = get_playable_audio_link(s3_file_name, "ai41-audio-files-test")
+#         audio = text_to_audio(bot_response)
+#         bot_timestamp = current_epoch_time()
+#         s3_file_name = generate_mp3_file_name()
+#         upload_audio_bytes_to_s3(audio, "ai41-audio-files-test", user_chat_id, bot_timestamp, s3_file_name)
+#         bot_audio_url = get_playable_audio_link(s3_file_name, "ai41-audio-files-test")
 
-        response_object, _ = store_message(user_chat_id, bot_response, "assistant", bot_timestamp, bot_audio_url)
+#         response_object, _ = store_message(user_chat_id, bot_response, "assistant", bot_timestamp, bot_audio_url)
 
-        return Response(body=response_object, status_code=200)
-    except Exception as e:
-        return Response(body={"error": str(e)}, status_code=500)
+#         return Response(body=response_object, status_code=200)
+#     except Exception as e:
+#         return Response(body={"error": str(e)}, status_code=500)
     
-@app.route("/chat/messages/{chat_id}", methods=["GET"], cors=cors_config)
-def get_chat_messages(chat_id):
-    print(f"chat id: {chat_id}")
-    messages = get_all_messages_for_chat(chat_id)
-    print(f"here are the messages {messages}")
-    return {"data": messages}
+# @app.route("/chat/messages/{chat_id}", methods=["GET"], cors=cors_config)
+# def get_chat_messages(chat_id):
+#     print(f"chat id: {chat_id}")
+#     messages = get_all_messages_for_chat(chat_id)
+#     print(f"here are the messages {messages}")
+#     return {"data": messages}
+

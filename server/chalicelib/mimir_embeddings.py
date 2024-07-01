@@ -11,7 +11,7 @@ load_dotenv()
 Helper Functions
 """
 
-def initialize_pinecone_index(index_name: str = "langchain-ai41") -> bool:
+def initialize_pinecone_index(index_name: str = "ai41") -> bool:
     """
     Return the requested Pinecone index. If not found, create the index.
     """
@@ -48,7 +48,7 @@ def initialize_pinecone_index(index_name: str = "langchain-ai41") -> bool:
         print(f"Error initializing Pinecone index: {e}")
         return False
 
-def check_pinecone_index(index_name="langchain-ai41"):
+def check_pinecone_index(index_name="ai41"):
     """Check a Pinecone Index stats."""
     pc = Pinecone(
         api_key=os.environ.get("PINECONE_API_KEY"),
@@ -84,11 +84,26 @@ def pinecone_website_upload(website_url):
 """
 Write these functions
 """
-def upload_documents_to_pinecone(documents, index_name="langchain-ai41"):
+def upload_documents_to_pinecone(documents, index_name="ai41"):
     """Uses the OpenAI Embeddings model to upload a list of documents to a Pinecone index."""
-    return
+    try:
+        embeddings_model = OpenAIEmbeddings(
+            model="text-embedding-3-small", 
+            openai_api_key=os.getenv("OPENAI_API_KEY")
+        )
 
-def pinecone_similarity_search(user_msg, index_name="langchain-ai41") -> str:
+        vectorstore = PineconeVectorStore.from_existing_index(
+            embedding=embeddings_model, 
+            index_name=index_name
+        )
+        upload_status = vectorstore.add_documents(documents=documents)
+        print(f"Uploaded {len(documents)} documents to Pinecone.")
+        check_pinecone_index(index_name=index_name)
+    except Exception as e:
+        print(f"Error uploading documents to Pinecone: {e}")
+    return upload_status
+
+def pinecone_similarity_search(user_msg, index_name="ai41") -> str:
     """
     Do a similarity search on the Pinecone vector store.
 
