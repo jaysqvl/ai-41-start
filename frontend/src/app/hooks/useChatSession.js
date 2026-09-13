@@ -8,20 +8,18 @@ import {
 } from "../utils/chatHelpers";
 
 const useChatSession = () => {
-  const [chatId, setChatId] = useState(getChatID());
+  const [chatId, setChatId] = useState(() => getChatID() || generateUniqueID());
 
   useEffect(() => {
-    // If no chat ID is present at component mount, generate a new one
-    if (!chatId) {
-      const newChatId = generateUniqueID();
-      setCookiesChatId(newChatId);
-      setChatId(newChatId);
+    // Synchronize the initialized session with the browser cookie after mount.
+    if (!getChatID()) {
+      setCookiesChatId(chatId);
     }
   }, [chatId]);
 
   const clearChatSession = () => {
     clearChatIDCookie(); // Clear the chat ID from cookies
-    setChatId(null); // Reset chatId state
+    setChatId(generateUniqueID()); // Start a fresh session.
   };
 
   // Function to refresh or create a new chat session if needed

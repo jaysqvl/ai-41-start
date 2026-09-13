@@ -4,7 +4,7 @@ import Image from "next/image";
 import styles from "../styles/spinner.module.css";
 
 // Memo: Do not re-render the component if props havent changed between re-renders
-const MessageItem = memo(({ message, botPngFile, isLast }) => {
+const MessageItem = memo(function MessageItem({ message, botPngFile, isLast }) {
   /**
    * Render the chat message for user/bots, showing a profile picture.
    * Optionally, it can play audio clips or show source documents.
