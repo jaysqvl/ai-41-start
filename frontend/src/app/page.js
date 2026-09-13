@@ -18,14 +18,14 @@ export default function Home() {
             className={`w-full mt-6 max-w-2xl text-center text-lg leading-7 sm:text-2xl sm:leading-9 sm:text-left lg:text-3xl ${instrumentSans.className}`}
           >
             <span className="font-bold">
-              Throughout this course, you'll be building stunning AI projects.
+              Throughout this course, you&apos;ll be building stunning AI projects.
             </span>
           </p>
           <p
             className={`w-full mt-6 max-w-2xl text-center text-lg leading-7 sm:text-2xl sm:leading-9 sm:text-left lg:text-3xl ${instrumentSans.className}`}
           >
-            You'l learn how to build personalized chatbots trained on your data.
-            You'll also build AI agents, capable of navigating through any
+            You&apos;l learn how to build personalized chatbots trained on your data.
+            You&apos;ll also build AI agents, capable of navigating through any
             complex workflow.
           </p>
         </div>
@@ -35,7 +35,7 @@ export default function Home() {
         className={`w-full mt-4 text-center text-10 leading-7 sm:text-2xl sm:leading-9 sm:text-center lg:text-3xl ${sourceCodePro.className}`}
       >
         This journey is yours. So{" "}
-        <strong>roll up your sleeves, and let's start building!</strong>
+        <strong>roll up your sleeves, and let&apos;s start building!</strong>
       </p>
     </div>
   );

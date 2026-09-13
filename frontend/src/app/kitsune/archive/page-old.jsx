@@ -45,28 +45,6 @@ const Chatbot = () => {
   const [chatId, setChatId] = useState(getChatID()); // Initialize chatId state
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
 
-  useEffect(() => {
-    // Define the async function inside the effect
-    async function fetchMessages() {
-      if (chatId && messages.length === 0) {
-        // Fetch previous messages if chatId is available
-        console.log("fetching messages");
-        await fetchPreviousMessages();
-      } else {
-        console.log("chatID not set, ");
-        // If chatId is not set, create a new one and update the state
-        const newChatId = generateUniqueID();
-        setCookiesChatId(newChatId);
-        setChatId(newChatId);
-        console.log(`Setting a new chat ID ${newChatId}`);
-      }
-    }
-
-    // Call the async function
-    // TODO - Remove this
-    fetchMessages();
-  }, [chatId]); // Dependencies array
-
   // todo - remove this
   // useEffect(() => {
   //   // Test basic function
@@ -199,6 +177,28 @@ const Chatbot = () => {
       setError("Error fetching messages.");
     }
   };
+
+  useEffect(() => {
+    // Define the async function inside the effect
+    async function fetchMessages() {
+      if (chatId && messages.length === 0) {
+        // Fetch previous messages if chatId is available
+        console.log("fetching messages");
+        await fetchPreviousMessages();
+      } else {
+        console.log("chatID not set, ");
+        // If chatId is not set, create a new one and update the state
+        const newChatId = generateUniqueID();
+        setCookiesChatId(newChatId);
+        setChatId(newChatId);
+        console.log(`Setting a new chat ID ${newChatId}`);
+      }
+    }
+
+    // Call the async function
+    // TODO - Remove this
+    fetchMessages();
+  }, [chatId]); // Dependencies array
 
   return (
     <>

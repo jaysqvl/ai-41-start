@@ -12,11 +12,6 @@ const ChatGPT = () => {
   const [response, setResponse] = useState(null); // Stores the chatbot's response
   const [isLoading, setIsLoading] = useState(false); // Tracks loading state
 
-  useEffect(() => {
-    // on page load, do something
-    testEndpoint();
-  }, []);
-
   const testEndpoint = async () => {
     try {
       // This is a test endpoint!
@@ -35,6 +30,11 @@ const ChatGPT = () => {
       console.error(err);
     }
   };
+
+  useEffect(() => {
+    // on page load, do something
+    testEndpoint();
+  }, []);
 
   // Function to handle the change in the input field
   const handleInputChange = (event) => {

@@ -9,7 +9,7 @@ import {
 } from "../utils/chatHelpers";
 
 const useChatbot = (baseUrl = "http://127.0.0.1:8000", debug = false) => {
-  const [chatId, setChatId] = useState(getChatID());
+  const [chatId, setChatId] = useState(() => getChatID() || generateUniqueID());
   // ChatMessages
   const [userMessage, setUserMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -27,14 +27,10 @@ const useChatbot = (baseUrl = "http://127.0.0.1:8000", debug = false) => {
      * 1. When the component is 'mounted' we check if the ChatID is present.
      * 2. If present, get old from the database.
      */
-    if (!chatId) {
-      const newChatId = generateUniqueID();
-      console.log({ newChatId });
-      setCookiesChatId(newChatId);
-      setChatId(newChatId);
-    } else {
-      fetchMessages();
+    if (!getChatID()) {
+      setCookiesChatId(chatId);
     }
+    fetchMessages();
 
     async function fetchMessages() {
       /** Fetches previous messages, or makes a new chat */
@@ -166,7 +162,7 @@ const useChatbot = (baseUrl = "http://127.0.0.1:8000", debug = false) => {
     setError(null);
   };
 
-  const newChat = () => {
+  function newChat() {
     /** Reset ChatID and messages */
 
     // Delete old ChatID
@@ -181,13 +177,13 @@ const useChatbot = (baseUrl = "http://127.0.0.1:8000", debug = false) => {
     if (messages.length > 0) {
       setMessages([]);
     }
-  };
+  }
 
 
-  const fetchPreviousMessages = async () => {
+  async function fetchPreviousMessages() {
     /** Phase 1: No need to use. */
     return;
-  };
+  }
 
   // const fetchPreviousMessages = async () => {
   //   /**
